@@ -4,7 +4,7 @@
     ViewData["Title"] = "Orders";
 }
 
-<h1>Orders</h1>
+<h1 class="text-center">Orders:</h1>
 
 <table class="table">
     <thead>
@@ -15,7 +15,8 @@
         </tr>
     </thead>
     <tbody>
-		@foreach (var order in Model) {
+		@foreach (var order in Model)
+		{
 		    <tr>
 		        <td>@* @order.User.Name *@</td>
 		        <td>@* @order.Product.Name *@</td> 

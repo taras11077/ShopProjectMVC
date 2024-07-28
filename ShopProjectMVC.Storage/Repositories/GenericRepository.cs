@@ -50,14 +50,9 @@ public class GenericRepository : IRepository
 
     public async Task<T> Update<T>(T entity) where T : class
     {
-        var obj = _context.Entry(entity);
-        if (obj.State == EntityState.Detached)
-        {
-            _context.Set<T>().Attach(entity);
-        }
-        obj.State = EntityState.Modified;
+        _context.Set<T>().Update(entity);
         await _context.SaveChangesAsync();
 
-        return obj.Entity;
+        return entity;
     }
 }
