@@ -7,36 +7,57 @@ public class GenericRepository : IRepository
 {
     private readonly ShopProjectContext _context;
 
-    public GenericRepository(string connectionString)
+    public GenericRepository(ShopProjectContext context)
     {
-        var options = new DbContextOptionsBuilder<ShopProjectContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-        _context = new ShopProjectContext(options);
+        _context = context;
     }
 
-    public Task<T> Add<T>(T entity) where T : class
+    public async Task<T> Add<T>(T entity) where T : class
     {
-        throw new NotImplementedException();
+        var obj = _context.Add(entity);
+        await _context.SaveChangesAsync();
+
+        return obj.Entity;
     }
 
-    public Task Delete<T>(int id) where T : class
+    public async Task Delete<T>(int id) where T : class
     {
-        throw new NotImplementedException();
+        var entity = await _context.Set<T>().FindAsync(id);
+        if (entity != null)
+        {
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new ArgumentException("Entity not found");
+        }
     }
+
 
     public IQueryable<T> GetAll<T>() where T : class
     {
         return _context.Set<T>();
     }
 
-    public Task<T> GetById<T>(int id) where T : class
+
+    public async Task<T> GetById<T>(int id) where T : class
     {
-        throw new NotImplementedException();
+        return await _context.Set<T>().FindAsync(id);
     }
 
-    public Task<T> Update<T>(T entity) where T : class
+
+
+    public async Task<T> Update<T>(T entity) where T : class
     {
-        throw new NotImplementedException();
+        var obj = _context.Entry(entity);
+        if (obj.State == EntityState.Detached)
+        {
+            _context.Set<T>().Attach(entity);
+        }
+        obj.State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+
+        return obj.Entity;
     }
 }

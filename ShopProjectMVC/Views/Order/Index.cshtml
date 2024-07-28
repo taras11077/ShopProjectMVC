@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ShopProjectMVC.Core.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Product</th>
+            <th>CreatedAt</th>
+        </tr>
+    </thead>
+    <tbody>
+		@foreach (var order in Model) {
+		    <tr>
+		        <td>@* @order.User.Name *@</td>
+		        <td>@* @order.Product.Name *@</td> 
+		        <td>@order.CreatedAt</td>
+		    </tr>
+		}
+    </tbody>
+</table>

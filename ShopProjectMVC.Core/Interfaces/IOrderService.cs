@@ -4,6 +4,6 @@ namespace ShopProjectMVC.Core.Interfaces;
 
 public interface IOrderService
 {
-    IEnumerable<Order> GetOrders(int userId);
-    IEnumerable<Order> GetOrders(int userId, int offset, int size);
+    IEnumerable<Order> GetAll(int userId);
+    IEnumerable<Order> GetAll(int userId, int offset, int size);
 }

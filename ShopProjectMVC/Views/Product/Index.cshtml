@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ShopProjectMVC.Core.Models.Product>
+
+@{
+	ViewData["Title"] = "Products";
+}
+
+<h1 class="text-center">Products:</h1>
+
+<div class="products-container">
+	@foreach (var product in Model)
+	{
+		<div class="card">
+			<div class="content">
+				<div class="title">@product.Name</div>
+				<div class="price">$@product.Price</div>
+				<div class="description">@product.Description</div>
+				<img src="@product.Image" alt="@product.Name" class="product-image" />
+				<div class="category">@product.Category?.Name</div> <!-- Assuming Category has a Name property -->
+				<div class="count">Available: @product.Count</div>
+			</div>
+			<form method="post" action="/Product/Buy">
+				<input type="hidden" name="productId" value="@product.Id" />
+				<button type="submit">Buy now</button>
+			</form>
+		</div>
+	}
+</div>
