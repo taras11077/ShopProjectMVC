@@ -5,10 +5,16 @@ namespace ShopProjectMVC.Storage;
 
 public class ShopProjectContext : DbContext
 {
-    public ShopProjectContext(DbContextOptions<ShopProjectContext> options)
-        : base(options)
-    {
-    }
+	public ShopProjectContext()
+	{
+
+	}
+
+	public ShopProjectContext(DbContextOptions<ShopProjectContext> options)
+		: base(options)
+	{
+
+	}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

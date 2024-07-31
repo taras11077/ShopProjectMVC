@@ -18,8 +18,7 @@ public class ProductService : IProductService
         return await _repository.Add(product);
     }
 
-
-
+    
     public async Task<Order> BuyProduct(int userId, int productId)
     {
         var product = await _repository.GetById<Product>(productId);
@@ -51,10 +50,16 @@ public class ProductService : IProductService
 
     public IEnumerable<Product> GetAll()
     {
-        return _repository.GetAll<Product>().ToList();
+        return _repository.GetAll<Product>();
     }
 
-    public async Task<Product> GetProductById(int id)
+
+    public IEnumerable<Category> GetAllCategories()
+    {
+	    return _repository.GetAll<Category>();
+    }
+
+	public async Task<Product> GetProductById(int id)
     {
         return await _repository.GetById<Product>(id);
     }

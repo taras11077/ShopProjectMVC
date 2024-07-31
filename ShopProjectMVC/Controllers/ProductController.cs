@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopProjectMVC.Core.Interfaces;
 using ShopProjectMVC.Core.Models;
 
@@ -11,14 +12,52 @@ public class ProductController : Controller
     public ProductController(IProductService productService)
     {
         _productService = productService;
+        ViewBag.Categories = productService.GetAllCategories().ToList();
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var products = _productService.GetAll();
+	    if (HttpContext.Session.GetString("user") == null)
+	    {
+		    return RedirectToAction("Login", "User");
+	    }
+
+		var products =  await _productService.GetAll().AsQueryable().ToListAsync();
         return View(products);
     }
 
-   
+    public IActionResult Create()
+    {
+	    ViewBag.Categories = _productService.GetAllCategories().ToList();
+	    return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Product product, int categoryId)
+    {
+	    product.Image = "";
+	    product.Category = _productService.GetAllCategories().First();
+	    await _productService.AddProduct(product);
+	    return RedirectToAction("Index");
+    }
+
+
+
+    public async Task<IActionResult> Delete(int id)
+    {
+	    var product = await _productService.GetProductById(id);
+	    return View(product);
+    }
+
+    [HttpPost]
+    [ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+	    await _productService.DeleteProduct(id);
+	    return RedirectToAction("Index");
+    }
+
+
 }
 

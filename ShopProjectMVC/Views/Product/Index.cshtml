@@ -1,27 +1,66 @@
 ﻿@model IEnumerable<ShopProjectMVC.Core.Models.Product>
+@inject IHttpContextAccessor accessor
 
 @{
 	ViewData["Title"] = "Products";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1 class="text-center">Products:</h1>
 
-<div class="products-container">
-	@foreach (var product in Model)
-	{
-		<div class="card">
-			<div class="content">
-				<div class="title">@product.Name</div>
-				<div class="price">$@product.Price</div>
-				<div class="description">@product.Description</div>
-				<img src="@product.Image" alt="@product.Name" class="product-image" />
-				<div class="category">@product.Category?.Name</div> <!-- Assuming Category has a Name property -->
-				<div class="count">Available: @product.Count</div>
+
+@if (accessor.HttpContext.Session.GetInt32("role") == 1)
+{
+	<table class="table table-striped table-bordered">
+		<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Count</th>
+			<th>Price</th>
+			<th>Operations</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var product in Model)
+		{
+			<tr>
+				<td>@product.Id</td>
+				<td>@product.Name</td>
+				<td>@product.Count</td>
+				<td>@product.Price</td>
+				<td>
+					<div>
+						<a>Edit</a>
+						<a asp-action="Delete" asp-route-id="@product.Id">Delete</a>
+					</div>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+	<br />
+	<a class="btn btn-success" asp-action="Create">Add product</a>
+}
+else
+{
+	<div class="products-container">
+		@foreach (var product in Model)
+		{
+			<div class="card">
+				<div class="content">
+					<div class="title">@product.Name</div>
+					<div class="price">$@product.Price</div>
+					<div class="description">@product.Description</div>
+					<img src="@product.Image" alt="@product.Name" class="product-image"/>
+					<div class="category">@product.Category?.Name</div> <!-- Assuming Category has a Name property -->
+					<div class="count">Available: @product.Count</div>
+				</div>
+				<form method="post" action="/Product/Buy">
+					<input type="hidden" name="productId" value="@product.Id"/>
+					<button type="submit">Buy now</button>
+				</form>
 			</div>
-			<form method="post" action="/Product/Buy">
-				<input type="hidden" name="productId" value="@product.Id" />
-				<button type="submit">Buy now</button>
-			</form>
-		</div>
-	}
-</div>
+		}
+	</div>
+}

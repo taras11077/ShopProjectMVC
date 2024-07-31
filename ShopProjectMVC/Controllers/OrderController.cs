@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopProjectMVC.Core.Interfaces;
-using ShopProjectMVC.Core.Services;
 
 namespace ShopProjectMVC.Controllers;
 
@@ -15,7 +14,7 @@ public class OrderController : Controller
 
     public IActionResult Index()
     {
-        var orders = _orderService.GetAll(1);
+        var orders = _orderService.GetAll(1).ToList();
         return View(orders);
     }
 }
