@@ -83,13 +83,26 @@ public class ProductController : Controller
 	[HttpPost]
 	[ActionName("Edit")]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> EditProduct(Product product, int id)
+	public async Task<IActionResult> EditProduct(Product product, int id, IFormFile file)
 	{
 		var productFromDb = await _productService.GetProductById(id);
 		productFromDb.Name = product.Name;
 		productFromDb.Description = product.Description;
 		productFromDb.Price = product.Price;
 		productFromDb.Count = product.Count;
+
+
+		string hash = Guid.NewGuid().ToString();
+		string name = Path.GetFileNameWithoutExtension(file.FileName) + hash + Path.GetExtension(file.FileName);
+		string path = Path.Combine(_env.WebRootPath, "pictures", name);
+		using (var fileStream = new MemoryStream())
+		{
+			file.CopyTo(fileStream);
+			await System.IO.File.WriteAllBytesAsync(path, fileStream.ToArray());
+		}
+
+		productFromDb.Image = name;
+
 		await _productService.UpdateProduct(productFromDb);
 		return RedirectToAction("Index");
 	}
