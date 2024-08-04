@@ -12,15 +12,20 @@ public class OrderService : IOrderService
         _repository = repository;
     }
 
-    public IEnumerable<Order> GetAll(int userId)
+    public IEnumerable<Order> GetAll()
+    {
+	    return _repository.GetAll<Order>();
+    }
+
+	public IEnumerable<Order> GetOrders(int userId)
     {
         return _repository.GetAll<Order>()
             .Where(order => order.User.Id == userId);
     }
 
-    public IEnumerable<Order> GetAll(int userId, int offset, int size)
+    public IEnumerable<Order> GetOrders(int userId, int offset, int size)
     {
-        return GetAll(userId).Skip(offset)
+        return GetOrders(userId).Skip(offset)
             .Take(size);
     }
 }

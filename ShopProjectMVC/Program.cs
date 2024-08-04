@@ -30,10 +30,14 @@ builder.Services.AddSession(options =>
 });
 
 
+
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new SessionCheckAttribute());
+    options.Filters.Add<CustomExceptionFilter>();
 });
+
+
 
 var app = builder.Build();
 
@@ -42,6 +46,7 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
 app.UseStaticFiles();
 
 app.UseRouting();

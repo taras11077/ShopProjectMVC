@@ -10,7 +10,7 @@ public class SessionCheckAttribute : ActionFilterAttribute
         var controller = context.RouteData.Values["controller"]?.ToString();
         var action = context.RouteData.Values["action"]?.ToString();
 
-        if (controller == "User" && action == "Login")
+        if (controller == "User" && (action == "Login" || action == "Register"))
         {
             base.OnActionExecuting(context);
             return;

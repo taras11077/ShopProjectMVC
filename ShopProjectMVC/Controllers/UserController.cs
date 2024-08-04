@@ -13,7 +13,6 @@ namespace ShopProjectMVC.Controllers
             _userService = userService;
         }
 
-
         public IActionResult Login()
         {
             return View();
@@ -36,8 +35,9 @@ namespace ShopProjectMVC.Controllers
 
             HttpContext.Session.SetString("user", userFromDb.Name);
             HttpContext.Session.SetInt32("role", (int)userFromDb.Role);
+            HttpContext.Session.SetInt32("id", userFromDb.Id);
 
-            return RedirectToAction("Index", "Product");
+			return RedirectToAction("Index", "Product");
         }
 
         [HttpPost]
@@ -47,6 +47,16 @@ namespace ShopProjectMVC.Controllers
             user.CreatedAt = DateTime.UtcNow;
             await _userService.Register(user);
             return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // видалення даних сесії
+            HttpContext.Session.Remove("user");
+
+            return RedirectToAction("Login", "User");
         }
 
     }

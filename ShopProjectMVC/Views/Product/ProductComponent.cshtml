@@ -1,0 +1,20 @@
+﻿@model ShopProjectMVC.Core.Models.Product
+
+<div class="card">
+	<div class="content">
+		<div class="title">@Model.Name</div>
+		<div class="price">$@Model.Price</div>
+		<div class="description">@Model.Description</div>
+
+		<img class="card-img" src="@(System.IO.Path.Combine("pictures", Model.Image))" alt="@Model.Name"/>
+
+		<div class="category">@Model.Category?.Name</div>
+		<div class="count">Available: @Model.Count</div>
+	</div>
+
+	<form method="post" asp-action="Buy">
+		<input type="hidden" name="id" value="@Model.Id"/>
+		<button type="submit">Buy now</button>
+	</form>
+</div>
+

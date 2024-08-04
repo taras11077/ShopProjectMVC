@@ -22,6 +22,7 @@ public class ProductService : IProductService
     public async Task<Order> BuyProduct(int userId, int productId)
     {
         var product = await _repository.GetById<Product>(productId);
+        var user = await _repository.GetById<User>(userId);
 
         if (product == null || product.Count <= 0)
         {
@@ -30,15 +31,15 @@ public class ProductService : IProductService
 
         var order = new Order
         {
-            User = await _repository.GetById<User>(userId),
+            User = user,
             Product = product,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         product.Count -= 1;
-        await _repository.Update(product);
+		await _repository.Add(order);
 
-        return await _repository.Add(order);
+		return order;
     }
 
 
