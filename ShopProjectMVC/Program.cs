@@ -34,7 +34,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new SessionCheckAttribute());
-    //options.Filters.Add<CustomExceptionFilter>();
+    options.Filters.Add<CustomExceptionFilter>();
 });
 
 
